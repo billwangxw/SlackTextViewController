@@ -106,6 +106,9 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     [self slk_registerTo:self.layer forSelector:@selector(position)];
     [self slk_registerTo:self.leftButton.imageView forSelector:@selector(image)];
     [self slk_registerTo:self.rightButton.titleLabel forSelector:@selector(font)];
+    
+    self.backgroundColor = [UIColor whiteColor];
+    [self setEditing:YES];
 }
 
 
@@ -148,10 +151,10 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
         _textView.returnKeyType = UIReturnKeyDefault;
         _textView.enablesReturnKeyAutomatically = YES;
         _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, -1.0, 0.0, 1.0);
-        _textView.textContainerInset = UIEdgeInsetsMake(8.0, 4.0, 8.0, 0.0);
+        _textView.textContainerInset = UIEdgeInsetsMake(8.0, 4.0, 0.0, 0.0);
         _textView.layer.cornerRadius = 5.0;
-        _textView.layer.borderWidth = 0.5;
-        _textView.layer.borderColor =  [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:205.0/255.0 alpha:1.0].CGColor;
+        _textView.layer.borderWidth = 0;
+        _textView.layer.borderColor = [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:205.0/255.0 alpha:1.0].CGColor;
     }
     return _textView;
 }
@@ -225,7 +228,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
                                   @"right" : @(self.contentInset.right)
                                   };
         
-        [_editorContentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(left)-[leftButton(60)]-(left)-[label(>=0)]-(right)-[rightButton(60)]-(<=right)-|" options:0 metrics:metrics views:views]];
+        [_editorContentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[leftButton(54)]-(left)-[label(>=0)]-(right)-[rightButton(60)]-(<=right)-|" options:0 metrics:metrics views:views]];
         [_editorContentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[leftButton]|" options:0 metrics:metrics views:views]];
         [_editorContentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[rightButton]|" options:0 metrics:metrics views:views]];
         [_editorContentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:metrics views:views]];
@@ -242,7 +245,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
         _editorTitle.backgroundColor = [UIColor clearColor];
         _editorTitle.font = [UIFont boldSystemFontOfSize:15.0];
         
-        NSString *title = NSLocalizedString(@"Editing Message", nil);
+        NSString *title = @"";//NSLocalizedString(@"Editing Message", nil);
         
         _editorTitle.text = title;
     }
@@ -254,12 +257,14 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     if (!_editorLeftButton) {
         _editorLeftButton = [UIButton buttonWithType:UIButtonTypeSystem];
         _editorLeftButton.translatesAutoresizingMaskIntoConstraints = NO;
-        _editorLeftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _editorLeftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         _editorLeftButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+        _editorLeftButton.layer.borderWidth = 0;
+        _editorLeftButton.layer.borderColor = [UIColor redColor].CGColor;
         
-        NSString *title = NSLocalizedString(@"Cancel", nil);
-        
-        [_editorLeftButton setTitle:title forState:UIControlStateNormal];
+//        NSString *title = NSLocalizedString(@"Cancel", nil);
+//        [_editorLeftButton setTitle:title forState:UIControlStateNormal];
+        [_editorLeftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
     }
     return _editorLeftButton;
 }
@@ -273,7 +278,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
         _editorRightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         _editorRightButton.enabled = NO;
         
-        NSString *title = NSLocalizedString(@"Save", nil);
+        NSString *title = NSLocalizedString(@"Send", nil);
         
         [_editorRightButton setTitle:title forState:UIControlStateNormal];
     }
@@ -663,7 +668,8 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0@750)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[rightButton]-(<=0)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(left@250)-[charCountLabel(<=50@1000)]-(right@750)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[editorContentView(0)]-(<=top)-[textView(0@999)]-(0)-|" options:0 metrics:metrics views:views]];
+//    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[editorContentView(0)]-(<=top)-[textView(0@999)]-(0)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[textView(0@999)]-(<=top)-[editorContentView(0)]-(0)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[editorContentView]|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[contentView(0)]|" options:0 metrics:metrics views:views]];
